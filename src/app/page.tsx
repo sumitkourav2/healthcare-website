@@ -1,69 +1,77 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import React, { useState } from "react";
+import Navbar from "@/components/Navbar";
+import HeroSlider from "@/components/HeroSlider";
+import ProcessTicker from "@/components/ProcessTicker";
+import AboutSection from "@/components/AboutSection";
+import FeatureTreatmentSection from "@/components/FeatureTreatmentSection";
+import ServicesExplorer from "@/components/ServicesExplorer";
+import BeforeAfterSlider from "@/components/BeforeAfterSlider";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import Footer from "@/components/Footer";
+import BookingModal from "@/components/BookingModal";
 
 export default function Home() {
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<string | undefined>();
+  const [selectedDoctor, setSelectedDoctor] = useState<string | undefined>();
+
+  const handleOpenBooking = (serviceName?: string, doctorName?: string) => {
+    setSelectedService(serviceName);
+    setSelectedDoctor(doctorName);
+    setIsBookingOpen(true);
+  };
+
+  const handleCloseBooking = () => {
+    setIsBookingOpen(false);
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main
+      style={{
+        position: "relative",
+        minHeight: "100vh",
+        backgroundColor: "#fafaf8",
+        overflowX: "hidden",
+      }}
+    >
+      {/* Top Navbar */}
+      <Navbar onOpenBooking={() => handleOpenBooking()} />
+
+      {/* Hero Slider with Sliding Animation (Matches Screenshot) */}
+      <HeroSlider onOpenBooking={(service) => handleOpenBooking(service)} />
+
+      {/* Process Ticker (Ribbed Animated Marquee from Screenshot) */}
+      <ProcessTicker />
+
+      {/* About Us Section (Matches Screenshot) */}
+      <AboutSection />
+
+      {/* Feature Treatment Section (Matches Screenshot: Dr. Daniel Carter + Operatory) */}
+      <FeatureTreatmentSection
+        onOpenBooking={(doctor) => handleOpenBooking(undefined, doctor)}
+      />
+
+      {/* Interactive Services & Treatments Explorer */}
+      <ServicesExplorer onOpenBooking={(service) => handleOpenBooking(service)} />
+
+      {/* Interactive Draggable Before / After Smile Slider */}
+      <BeforeAfterSlider />
+
+      {/* Sliding Testimonials Reviews */}
+      <TestimonialsSection />
+
+      {/* Footer & Live Clinic Status */}
+      <Footer onOpenBooking={() => handleOpenBooking()} />
+
+      {/* Interactive Appointment Booking Modal */}
+      <BookingModal
+        isOpen={isBookingOpen}
+        onClose={handleCloseBooking}
+        initialService={selectedService}
+        initialDoctor={selectedDoctor}
+      />
+    </main>
   );
 }
